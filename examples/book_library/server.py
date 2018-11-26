@@ -5,6 +5,7 @@ import uuid
 import vakt.rules.net
 import vakt.rules.string
 import vakt.checker
+import vakt.audit
 from vakt.storage.mongo import MongoStorage, Migration0To1x0x3
 from vakt.storage.memory import MemoryStorage
 from vakt.effects import DENY_ACCESS, ALLOW_ACCESS
@@ -72,6 +73,10 @@ guard = None
 
 def init():
     # Set up logger.
+    vakt.audit.enable()
+    va = vakt.audit.get_logger()
+    va.addHandler(logging.FileHandler(filename='audit.log'))
+
     root = logging.getLogger()
     root.setLevel(logging.DEBUG)
     root.addHandler(logging.StreamHandler())
